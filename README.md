@@ -1,46 +1,79 @@
-# Astro Starter Kit: Basics
+# Чисто Тюмень — Сайт клининговых услуг
+
+Профессиональная химчистка мягкой мебели, диванов, матрасов и ковров в Тюмени. Проект реализован на базе современного стека Astro с акцентом на SEO-оптимизацию и высокую производительность.
+
+## Особенности проекта
+
+- 🚀 **Astro 5+** — Высокая скорость загрузки благодаря статической генерации (SSG).
+- 🧩 **Компонентная архитектура** — Каждый блок страницы является независимым переиспользуемым компонентом.
+- 📈 **SEO-ориентированность** — Автоматическая генерация посадочных страниц (кластеров) под конкретные поисковые запросы.
+- 📝 **Content Collections** — Управление статьями и услугами через Markdown файлы.
+- 🖼 **Оптимизация изображений** — Использование `astro:assets` для автоматического преобразования в WebP и ленивой загрузки.
+- 🤖 **RAG Content Generation** — Интеграция с MCP для создания уникального контента с помощью ИИ.
+- 📞 **n8n Integration** — Сбор заявок через вебхуки напрямую в CRM/мессенджеры.
+
+## Технологический стек
+
+| Технология | Назначение |
+| :--------- | :--------- |
+| [Astro](https://astro.build) 5 | Основной фреймворк |
+| [Tailwind CSS](https://tailwindcss.com) | Стилизация |
+| [Lucide Icons](https://lucide.dev) | Иконки |
+| Content Collections | Управление контентом в Markdown |
+| n8n | Обработка заявок (webhook) |
+
+## Быстрый старт
+
+Требуется **Node.js >= 20**.
 
 ```sh
-npm create astro@latest -- --template basics
+# Установка зависимостей
+npm install
+
+# Запуск dev-сервера на http://localhost:4321
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Команды
 
-## 🚀 Project Structure
+Все команды выполняются из корня проекта:
 
-Inside of your Astro project, you'll see the following folders and files:
+| Команда            | Действие                                              |
+| :----------------- | :---------------------------------------------------- |
+| `npm install`      | Установка зависимостей                                |
+| `npm run dev`      | Локальный dev-сервер на `localhost:4321`              |
+| `npm run build`    | Сборка production-версии в `./dist/`                  |
+| `npm run preview`  | Предпросмотр собранного сайта                         |
+
+## Структура проекта
 
 ```text
 /
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+├── public/                # Статические файлы (шрифты, скрипты темы, favicon)
+├── seo/                   # Семантическое ядро и SEO-материалы
+├── src/
+│   ├── assets/            # Изображения для оптимизации (через astro:assets)
+│   ├── components/        # Astro-компоненты блоков лендинга
+│   │   └── landing/       # Секции страницы (Hero, Services, About и т.д.)
+│   ├── content/           # Контент-коллекции (Markdown)
+│   │   ├── posts/         # Статьи блога
+│   │   └── uslugi/        # Детальные страницы услуг
+│   ├── data/              # Статические данные и конфигурация (SSOT)
+│   ├── layouts/           # Шаблоны страниц (Layout, PostLayout)
+│   └── pages/             # Маршрутизация (главная, контакты, кластеры)
+├── astro.config.mjs       # Конфигурация Astro
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Документация
 
-## 🧞 Commands
+Подробное описание архитектуры, процесса миграции и инструкций по контенту находится в файле:
+- [**SUMMARY.md**](./SUMMARY.md) — Основная документация проекта.
 
-All commands are run from the root of the project, from a terminal:
+## Контакты
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- **Телефон**: +7 908 871 20 26
+- **Сайт**: [chistotyumen.ru](https://chistotyumen.ru)
+- **Разработчик**: [W1DO DIGITAL](https://w1do.ru)
+- **Telegram**: [@W1DO_DIGITAL](https://t.me/W1DO_DIGITAL)
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
