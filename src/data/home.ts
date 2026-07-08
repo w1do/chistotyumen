@@ -100,7 +100,7 @@ export interface ServiceCard {
 
 export const services = {
   subtitle: 'Что делаем',
-  title: 'Химчистка мебели и сопутствующие услуги.',
+  title: 'Химчистка мебели',
   fidNumber: '2',
   fidTitle: 'часа в среднем на одну мебельную единицу — в типовом случае',
   cards: [
