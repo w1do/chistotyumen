@@ -49,6 +49,38 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sli
 ---
 
 <Layout title={title} description={description}>
+	<Fragment slot="head">
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		{imagePath && <meta property="og:image" content={new URL(imagePath, Astro.site)} />}
+		
+		<script type="application/ld+json" is:inline set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "BlogPosting",
+			"headline": title,
+			"description": description,
+			"image": imagePath ? new URL(imagePath, Astro.site) : undefined,
+			"datePublished": date,
+			"author": {
+				"@type": "Organization",
+				"name": "Чисто Тюмень",
+				"url": "https://chistotyumen.ru"
+			},
+			"publisher": {
+				"@type": "Organization",
+				"name": "Чисто Тюмень",
+				"logo": {
+					"@type": "ImageObject",
+					"url": "https://chistotyumen.ru/images/logo.png"
+				}
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": new URL(Astro.url.pathname, Astro.site)
+			}
+		})} />
+	</Fragment>
 	<div class="page-wrapper">
 		<HeaderServiceDetails 
 			header={header} 

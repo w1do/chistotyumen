@@ -83,6 +83,19 @@ const dynamicBlog = {
 ---
 
 <Layout>
+    <Fragment slot="head">
+        <script type="application/ld+json" is:inline set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Наши услуги по химчистке",
+            "itemListElement": servicesData.cards.map((card, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "name": card.title,
+                "url": new URL(card.detailUrl, Astro.site)
+            }))
+        })} />
+    </Fragment>
     <div class="page-wrapper">
         <HeaderSlider header={header} slides={heroSlides} />
         <div class="page-content">

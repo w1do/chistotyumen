@@ -13,6 +13,11 @@ const page = contact;
 ---
 
 <Layout title={page.meta.title} description={page.meta.description}>
+    <Fragment slot="head">
+        {page.jsonLd.map((entry) => (
+            <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+        ))}
+    </Fragment>
     <div class="page-wrapper">
         <HeaderServiceDetails
             header={page.header}
@@ -39,7 +44,4 @@ const page = contact;
         </div>
         <FooterFive data={page.footer} />
     </div>
-    {page.jsonLd.map((entry) => (
-        <script type="application/ld+json" set:html={JSON.stringify(entry)} />
-    ))}
 </Layout>

@@ -94,6 +94,41 @@ const faqs = data.faqs ?? [
 ---
 
 <Layout title={data.title} description={data.description}>
+    <Fragment slot="head">
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={data.title} />
+        <meta property="og:description" content={data.description} />
+        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site)} />}
+        
+        <script type="application/ld+json" is:inline set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": data.title,
+            "description": data.description,
+            "provider": {
+                "@type": "LocalBusiness",
+                "name": "Чисто Тюмень",
+                "url": "https://chistotyumen.ru"
+            },
+            "areaServed": {
+                "@type": "City",
+                "name": "Тюмень"
+            },
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Химчистка мебели",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": data.title
+                        }
+                    }
+                ]
+            }
+        })} />
+    </Fragment>
     <div class="page-wrapper">
         <HeaderServiceDetails
             header={header}

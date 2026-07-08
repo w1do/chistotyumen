@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /*?
+Disallow: /admin
+Disallow: /api/
+Allow: /
+
+Sitemap: https://chistotyumen.ru/sitemap-index.xml

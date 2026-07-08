@@ -34,6 +34,38 @@ const recentPosts = (await getCollection('posts'))
 ---
 
 <Layout title={data.title} description={data.description}>
+    <Fragment slot="head">
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={data.title} />
+        <meta property="og:description" content={data.description} />
+        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site)} />}
+        
+        <script type="application/ld+json" is:inline set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": data.title,
+            "description": data.description,
+            "image": data.imagePath ? new URL(data.imagePath, Astro.site) : undefined,
+            "datePublished": data.date,
+            "author": {
+                "@type": "Organization",
+                "name": "Чисто Тюмень",
+                "url": "https://chistotyumen.ru"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Чисто Тюмень",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://chistotyumen.ru/images/logo.png"
+                }
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": new URL(Astro.url.pathname, Astro.site)
+            }
+        })} />
+    </Fragment>
     <div class="page-wrapper">
         <HeaderServiceDetails
             header={header}

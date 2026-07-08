@@ -11,12 +11,78 @@ const {
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:image" content={new URL('/images/logo.png', Astro.site)} />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content={new URL(Astro.url.pathname, Astro.site)} />
+	<meta property="twitter:title" content={title} />
+	<meta property="twitter:description" content={description} />
+	<meta property="twitter:image" content={new URL('/images/logo.png', Astro.site)} />
+
+	<script type="application/ld+json" is:inline set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"name": "Чисто Тюмень",
+		"url": "https://chistotyumen.ru",
+		"potentialAction": {
+			"@type": "SearchAction",
+			"target": "https://chistotyumen.ru/?s={search_term_string}",
+			"query-input": "required name=search_term_string"
+		}
+	})} />
+
+	<script type="application/ld+json" is:inline set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "LocalBusiness",
+		"name": "Чисто Тюмень",
+		"image": "https://chistotyumen.ru/images/logo.png",
+		"@id": "https://chistotyumen.ru",
+		"url": "https://chistotyumen.ru",
+		"telephone": "+79088712026",
+		"address": {
+			"@type": "PostalAddress",
+			"streetAddress": "Тюмень",
+			"addressLocality": "Тюмень",
+			"addressRegion": "Тюменская область",
+			"postalCode": "625000",
+			"addressCountry": "RU"
+		},
+		"geo": {
+			"@type": "GeoCoordinates",
+			"latitude": 57.1522,
+			"longitude": 65.5272
+		},
+		"openingHoursSpecification": {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": [
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday",
+				"Saturday",
+				"Sunday"
+			],
+			"opens": "09:00",
+			"closes": "21:00"
+		}
+	})} />
+
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 	<link rel="icon" href="/favicon.ico" />
 	<meta name="generator" content={Astro.generator} />
 	<title>{title}</title>
+	<slot name="head" />
 	<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/fontawesome.css">
