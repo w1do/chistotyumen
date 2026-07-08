@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Layout from './Layout.astro';
+import HeaderServiceDetails from '../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../components/landing/TitleBar.astro';
+import FooterFive from '../components/landing/FooterFive.astro';
+import { resolveImage } from '../lib/images';
+import { header, footer, site } from '../data/home';
+
+interface Props {
+    frontmatter: {
+        title: string;
+        description: string;
+        imagePath: string;
+        imageAlt: string;
+        author?: string;
+        date?: string;
+    };
+}
+
+const { frontmatter } = Astro.props;
+const data = frontmatter;
+const phoneTelHref = `tel:${site.phoneTel}`;
+
+// Получаем последние посты для сайдбара
+const recentPosts = (await getCollection('posts'))
+    .sort((a, b) => {
+        const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+        const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+        return dateB - dateA;
+    })
+    .slice(0, 3);
+---
+
+<Layout title={data.title} description={data.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={header}
+            phoneDisplay={site.phone}
+            phoneTelHref={phoneTelHref}
+        />
+        <TitleBar
+            heading={data.title}
+            homeLabel={site.brand}
+            homeUrl="/"
+            currentLabel={data.title}
+            trailItems={[
+                { label: 'Блог', url: '/posts' },
+            ]}
+        />
+
+        <div class="page-content">
+            <!-- Blog Details -->
+            <section class="site-content blog-details">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9 blog-right-col">
+                            <article>
+                                <div class="post blog-classic">
+                                    <div class="pbmit-featured-img-wrapper">
+                                        <div class="pbmit-featured-wrapper">
+                                            <Image src={resolveImage(data.imagePath)} class="img-fluid w-100" alt={data.imageAlt} />
+                                        </div>
+                                    </div>
+                                    <div class="pbmit-blog-classic-inner">
+                                        <div class="pbmit-blog-meta pbmit-blog-meta-top">
+                                            <span class="pbmit-meta pbmit-meta-date">
+                                                <i class="pbmit-base-icon-calendar-3"></i>
+                                                <time class="entry-date published">{data.date || 'Статья'}</time>
+                                            </span>
+                                            <span class="pbmit-meta pbmit-meta-author">
+                                                <i class="pbmit-base-icon-user-3"></i>От 
+                                                <span class="pbmit-author-link">{data.author || 'Чисто Тюмень'}</span>
+                                            </span>
+                                        </div>
+                                        <div class="pbmit-entry-content">
+                                            <slot />
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-12 col-lg-3 blog-left-col">
+                            <aside class="sidebar">
+                                <aside class="widget widget-recent-post">
+                                    <h2 class="widget-title">Последние статьи</h2>
+                                    <ul class="recent-post-list">
+                                        {recentPosts.map((post) => (
+                                            <li class="recent-post-list-li">
+                                                <a class="recent-post-thum" href={`/posts/${post.id.split('/').pop()}`}>
+                                                    <Image 
+                                                        src={resolveImage(post.data.imagePath)} 
+                                                        class="img-fluid" 
+                                                        alt={post.data.imageAlt} 
+                                                        width={150} 
+                                                        height={100}
+                                                    />
+                                                </a>
+                                                <div class="pbmit-rpw-content">
+                                                    <span class="pbmit-rpw-date">
+                                                        <a href={`/posts/${post.id.split('/').pop()}`}>{post.data.date || 'Статья'}</a>
+                                                    </span>
+                                                    <span class="pbmit-rpw-title">
+                                                        <a href={`/posts/${post.id.split('/').pop()}`}>{post.data.title}</a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </aside>
+                                <aside class="widget pbmit-service-ad">
+                                    <div class="textwidget">
+                                        <div class="pbmit-service-ads">
+                                            <h5 class="pbmit-ads-subheding">Нужна консультация?</h5>
+                                            <h4 class="pbmit-ads-subtitle">Готовы помочь!</h4>
+                                            <h3 class="pbmit-ads-title">Закажите звонок</h3>
+                                            <div class="pbmit-ads-desc">
+                                                <i class="pbmit-base-icon-phone-call-1"></i>{site.phone}
+                                            </div>
+                                            <a class="pbmit-btn pbmit-btn-hover-white" href={site.telegramUrl}>
+                                                <span class="pbmit-button-content-wrapper">
+                                                    <span class="pbmit-button-text">Написать в MAX</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <FooterFive data={footer} />
+    </div>
+</Layout>

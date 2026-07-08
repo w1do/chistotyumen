@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import { resolveImage } from '../../lib/images';
+import type { NavLink } from '../../data/home';
+
+interface HeaderData {
+  logoPath: string;
+  logoAlt: string;
+  homeUrl: string;
+  navItems: NavLink[];
+  primaryCtaLabel: string;
+  primaryCtaUrl: string;
+}
+
+interface Props {
+  header: HeaderData;
+  phoneDisplay?: string;
+  phoneTelHref?: string;
+}
+
+const { header, phoneDisplay = '', phoneTelHref = '' } = Astro.props;
+---
+
+<header class="site-header header-style-1">
+    <div class="pbmit-header-overlay">
+        <div class="pbmit-main-header-area">
+            <div class="container-fluid">
+                <div class="pbmit-header-content d-flex justify-content-between align-items-center">
+                    <div class="pbmit-logo-button-area d-flex justify-content-between align-items-center">
+                        <div class="site-branding">
+                            <div class="site-title">
+                                <a href={header.homeUrl}>
+                                    <Image class="logo-img" src={resolveImage(header.logoPath)} width={160} height={48} alt={header.logoAlt} loading="lazy" />
+                                </a>
+                            </div>
+                            <div class="pbmit-sticky-corner pbmit-top-right-corner" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 20V0C20 16 16 20 0 20H20Z" fill="red"></path>
+                                </svg>
+                            </div>
+                            <div class="pbmit-sticky-corner pbmit-bottom-left-corner" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 20V0C20 12 12 20 0 20H20Z" fill="red"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        {phoneDisplay !== '' && phoneTelHref !== '' && (
+                            <div class="pbmit-button-box">
+                                <div class="pbmit-header-button">
+                                    <a href={phoneTelHref}>
+                                        <span class="pbmit-header-button-text-1">{phoneDisplay}</span>
+                                        <span class="pbmit-header-button-text-2">{phoneTelHref}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div class="site-navigation">
+                        <nav class="main-menu navbar-expand-xl navbar-light" aria-label="Основное меню">
+                            <div class="navbar-header">
+                                <button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="pbmit-menu" aria-label="Открыть меню">
+                                    <i class="pbmit-base-icon-menu-1" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="pbmit-mobile-menu-bg"></div>
+                            <div class="collapse navbar-collapse clearfix show" id="pbmit-menu">
+                                <div class="pbmit-menu-wrap">
+                                    <span class="closepanel">
+                                        <svg class="qodef-svg--close qodef-m" xmlns="http://www.w3.org/2000/svg" width="20.163" height="20.163" viewBox="0 0 26.163 26.163" aria-hidden="true">
+                                            <rect width="36" height="1" transform="translate(0.707) rotate(45)"></rect>
+                                            <rect width="36" height="1" transform="translate(0 25.456) rotate(-45)"></rect>
+                                        </svg>
+                                    </span>
+                                    <ul class="navigation clearfix">
+                                        {header.navItems.map((item) => (
+                                            item.children && item.children.length > 0 ? (
+                                                <li class="dropdown">
+                                                    <a href={item.url}>{item.label}</a>
+                                                    <ul>
+                                                        {item.children.map((child) => (
+                                                            <li>
+                                                                <a href={child.url}>{child.label}</a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <span class="righticon"><i class="pbmit-base-icon-angle-right"></i></span>
+                                                </li>
+                                            ) : (
+                                                <li>
+                                                    <a href={item.url}>{item.label}</a>
+                                                </li>
+                                            )
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="pbmit-right-box d-flex align-items-center">
+                        <div class="pbmit-button-box-second">
+                            <a class="pbmit-btn" href={header.primaryCtaUrl}>
+                                <span class="pbmit-button-content-wrapper">
+                                    <span class="pbmit-button-text">{header.primaryCtaLabel}</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

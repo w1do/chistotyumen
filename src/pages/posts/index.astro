@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import HeaderServiceDetails from '../../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../../components/landing/TitleBar.astro';
+import FooterFive from '../../components/landing/FooterFive.astro';
+import { resolveImage } from '../../lib/images';
+import { header, footer, site } from '../../data/home';
+
+const allPosts = (await getCollection('posts'))
+    .sort((a, b) => {
+        const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+        const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+        return dateB - dateA;
+    });
+
+const phoneTelHref = `tel:${site.phoneTel}`;
+const meta = {
+    title: 'Блог о химчистке — полезные советы и новости | Чисто Тюмень',
+    description: 'Читайте наш блог: советы по уходу за мебелью и коврами, новости компании Чисто Тюмень, секреты профессиональной химчистки.',
+};
+---
+
+<Layout title={meta.title} description={meta.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={header}
+            phoneDisplay={site.phone}
+            phoneTelHref={phoneTelHref}
+        />
+        <TitleBar
+            heading="Блог"
+            homeLabel={site.brand}
+            homeUrl="/"
+            currentLabel="Блог"
+        />
+
+        <div class="page-content">
+            <!-- Blog Grid Col 3 -->
+            <section class="section-md">
+                <div class="container">
+                    <div class="row pbmit-element-posts-wrapper">
+                        {allPosts.map((post) => (
+                            <article class="pbmit-ele-blog pbmit-blog-style-1 col-md-4 mb-4">
+                                <div class="post-item">
+                                    <div class="pbminfotech-box-content">
+                                        <div class="pbmit-featured-container">
+                                            <div class="pbmit-featured-img-wrapper">
+                                                <div class="pbmit-featured-wrapper">
+                                                    <Image 
+                                                        src={resolveImage(post.data.imagePath)} 
+                                                        class="img-fluid" 
+                                                        alt={post.data.imageAlt} 
+                                                        width={400}
+                                                        height={267}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <a class="pbmit-blog-btn" href={`/posts/${post.id.split('/').pop()}`} title={post.data.title}>
+                                                <span class="pbmit-button-icon">
+                                                    <i class="pbmit-base-icon-pbmit-up-arrow"></i>
+                                                </span>
+                                            </a>
+                                            <a class="pbmit-link" href={`/posts/${post.id.split('/').pop()}`}></a>
+                                        </div>
+                                        <div class="pbmit-content-wrapper">
+                                            <div class="pbmit-date-wraper d-flex align-items-center">
+                                                <div class="pbmit-meta-date-wrapper pbmit-meta-line">
+                                                    <div class="pbmit-meta-date">
+                                                        <span class="pbmit-post-date">
+                                                            <i class="pbmit-base-icon-calendar-3"></i>{post.data.date || 'Статья'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="pbmit-meta-author pbmit-meta-line">
+                                                    <span class="pbmit-post-author">
+                                                        <i class="pbmit-base-icon-user-3"></i><span>От</span>{post.data.author || 'Чисто Тюмень'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <h3 class="pbmit-post-title">
+                                                <a href={`/posts/${post.id.split('/').pop()}`}>{post.data.title}</a>
+                                            </h3>
+                                            <div class="pbminfotech-box-desc">
+                                                {post.data.excerpt}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+            <!-- Blog Grid Col 3 End -->
+        </div>
+
+        <FooterFive data={footer} />
+    </div>
+</Layout>

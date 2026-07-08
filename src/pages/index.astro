@@ -1,11 +1,104 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import HeaderSlider from '../components/landing/HeaderSlider.astro';
+import ServiceFive from '../components/landing/ServiceFive.astro';
+import MarqueeSection from '../components/landing/MarqueeSection.astro';
+import AboutFive from '../components/landing/AboutFive.astro';
+import IhboxFive from '../components/landing/IhboxFive.astro';
+import PortfolioFive from '../components/landing/PortfolioFive.astro';
+import StaticBoxFive from '../components/landing/StaticBoxFive.astro';
+import AboutOfferFive from '../components/landing/AboutOfferFive.astro';
+import PricingFive from '../components/landing/PricingFive.astro';
+import FaqSection from '../components/landing/FaqSection.astro';
+import TestimonialFive from '../components/landing/TestimonialFive.astro';
+import ClientsFive from '../components/landing/ClientsFive.astro';
+import BlogFive from '../components/landing/BlogFive.astro';
+import FooterFive from '../components/landing/FooterFive.astro';
+import { getCollection } from 'astro:content';
+import {
+  header,
+  heroSlides,
+  services,
+  marquee,
+  about,
+  ihboxItems,
+  portfolioSlides,
+  staticBoxes,
+  aboutOffer,
+  pricing,
+  faq,
+  testimonials,
+  clientLogos,
+  blog,
+  footer,
+} from '../data/home';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Привязываем карточки услуг главной к первым постам соответствующих кластеров,
+// чтобы ссылки вели на посты, а не на мессенджер.
+const allUslugi = await getCollection('uslugi');
+const firstPostUrl = (cluster: string): string | undefined => {
+  const uslugi = allUslugi
+    .filter((p) => p.data.cluster === cluster)
+    .sort((a, b) => a.data.order - b.data.order);
+  const first = uslugi[0];
+  return first ? `/uslugi/${first.data.cluster}/${first.id.split('/').pop()}` : undefined;
+};
+
+// Соответствие карточек услуг главной страницы кластерам (по порядку карточек).
+const cardClusters = [
+  'khimchistka-divanov',
+  'khimchistka-myagkoy-mebeli',
+  'khimchistka-stulev',
+  'khimchistka-kovrov',
+];
+const servicesData = {
+  ...services,
+  cards: services.cards.map((card, i) => ({
+    ...card,
+    detailUrl: firstPostUrl(cardClusters[i]) ?? card.detailUrl,
+  })),
+};
+
+// Подтягиваем реальные посты для блока "Новости" (BlogFive)
+const allPosts = (await getCollection('posts'))
+    .sort((a, b) => {
+        const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+        const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+        return dateB - dateA;
+    })
+    .slice(0, 3);
+
+const dynamicBlog = {
+    ...blog,
+    posts: allPosts.map(p => ({
+        title: p.data.title,
+        excerpt: p.data.excerpt,
+        url: `/posts/${p.id.split('/').pop()}`,
+        imagePath: p.data.imagePath,
+        imageAlt: p.data.imageAlt,
+        dateLabel: p.data.date || 'Статья',
+        authorLine: p.data.author,
+    }))
+};
 ---
 
 <Layout>
-	<Welcome />
+    <div class="page-wrapper">
+        <HeaderSlider header={header} slides={heroSlides} />
+        <div class="page-content">
+            <ServiceFive data={servicesData} />
+            <MarqueeSection items={marquee} />
+            <AboutFive data={about} />
+            <IhboxFive items={ihboxItems} />
+            <PortfolioFive slides={portfolioSlides} />
+            <StaticBoxFive data={staticBoxes} />
+            <AboutOfferFive data={aboutOffer} />
+            <PricingFive data={pricing} />
+            <FaqSection data={faq} />
+            <TestimonialFive data={testimonials} />
+            <ClientsFive logos={clientLogos} />
+            <BlogFive data={dynamicBlog} />
+        </div>
+        <FooterFive data={footer} />
+    </div>
 </Layout>

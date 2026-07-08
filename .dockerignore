@@ -1,0 +1,14 @@
+node_modules
+dist
+ref
+.DS_Store
+.git
+.env
+.gitignore
+README.md
+AGENTS.md
+CLAUDE.md
+idea.md
+LANDING.md
+SUMMARY.md
+/source

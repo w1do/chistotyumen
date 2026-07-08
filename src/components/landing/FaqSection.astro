@@ -1,0 +1,45 @@
+---
+import FaqAccordion from './FaqAccordion.astro';
+import type { FaqItem } from '../../data/home';
+
+interface FaqData {
+  anchorId: string;
+  leftAccordionId: string;
+  rightAccordionId: string;
+  subtitle: string;
+  title: string;
+  intro: string;
+  leftColumn: FaqItem[];
+  rightColumn: FaqItem[];
+}
+
+interface Props {
+  data: FaqData;
+}
+
+const { data } = Astro.props;
+---
+
+<section class="section-xl" id={data.anchorId}>
+    <div class="container">
+        <div class="pbmit-heading-subheading text-center animation-style2">
+            <h4 class="pbmit-subtitle">{data.subtitle}</h4>
+            <h2 class="pbmit-title">{data.title}</h2>
+            <div class="pbmit-heading-desc">
+                {data.intro}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-xl-6">
+                <div class="pe-xl-3">
+                    <FaqAccordion accordionId={data.leftAccordionId} items={data.leftColumn} />
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-6">
+                <div class="ps-xl-3">
+                    <FaqAccordion accordionId={data.rightAccordionId} items={data.rightColumn} />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

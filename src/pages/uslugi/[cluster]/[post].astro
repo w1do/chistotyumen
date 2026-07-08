@@ -1,0 +1,22 @@
+---
+// Детальная страница поста-продолжения кластера.
+// Вся вёрстка вынесена в src/layouts/PostLayout.astro (макет service-details.html);
+// здесь только рендер markdown-контента в слот макета.
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const uslugi = await getCollection('uslugi');
+  return uslugi.map((entry) => ({
+    params: { cluster: entry.data.cluster, post: entry.id.split('/').pop() },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<PostLayout frontmatter={entry.data}>
+    <Content />
+</PostLayout>

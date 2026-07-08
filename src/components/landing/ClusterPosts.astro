@@ -1,0 +1,78 @@
+---
+// Список постов-продолжений кластера. Вёрстка повторяет макет blog-m-grid-col-3
+// (masonry, колонки col-md-4). Данные приходят из content collection `posts`.
+import { Image } from 'astro:assets';
+import { resolveImage } from '../../lib/images';
+
+export interface ClusterPostCard {
+  title: string;
+  excerpt: string;
+  url: string;
+  imagePath: string;
+  imageAlt: string;
+  dateLabel: string;
+  author: string;
+}
+
+interface Props {
+  subtitle: string;
+  title: string;
+  posts: ClusterPostCard[];
+}
+
+const { subtitle, title, posts } = Astro.props;
+---
+
+<section class="section-md pbmit-element-viewtype-masonry">
+    <div class="container">
+        <div class="pbmit-heading-subheading text-center animation-style3">
+            <h4 class="pbmit-subtitle">{subtitle}</h4>
+            <h2 class="pbmit-title">{title}</h2>
+        </div>
+        <div class="row pbmit-element-posts-wrapper">
+            {posts.map((post) => (
+                <article class="pbmit-ele-blog pbmit-blog-style-1 col-md-4">
+                    <div class="post-item">
+                        <div class="pbminfotech-box-content">
+                            <div class="pbmit-featured-container">
+                                <div class="pbmit-featured-img-wrapper">
+                                    <div class="pbmit-featured-wrapper">
+                                        <Image src={resolveImage(post.imagePath)} class="img-fluid" alt={post.imageAlt} loading="lazy" />
+                                    </div>
+                                </div>
+                                <a class="pbmit-blog-btn" href={post.url} title={post.title}>
+                                    <span class="pbmit-button-icon">
+                                        <i class="pbmit-base-icon-pbmit-up-arrow" aria-hidden="true"></i>
+                                    </span>
+                                </a>
+                                <a class="pbmit-link" href={post.url}></a>
+                            </div>
+                            <div class="pbmit-content-wrapper">
+                                <div class="pbmit-date-wraper d-flex align-items-center">
+                                    <div class="pbmit-meta-date-wrapper pbmit-meta-line">
+                                        <div class="pbmit-meta-date">
+                                            <span class="pbmit-post-date">
+                                                <i class="pbmit-base-icon-calendar-3" aria-hidden="true"></i>{post.dateLabel}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="pbmit-meta-author pbmit-meta-line">
+                                        <span class="pbmit-post-author">
+                                            <i class="pbmit-base-icon-user-3" aria-hidden="true"></i><span>Автор:</span>{post.author}
+                                        </span>
+                                    </div>
+                                </div>
+                                <h3 class="pbmit-post-title">
+                                    <a href={post.url}>{post.title}</a>
+                                </h3>
+                                <div class="pbminfotech-box-desc">
+                                    {post.excerpt}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </div>
+</section>

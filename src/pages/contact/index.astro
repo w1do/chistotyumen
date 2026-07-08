@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HeaderServiceDetails from '../../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../../components/landing/TitleBar.astro';
+import ContactIhboxSwiper from '../../components/landing/ContactIhboxSwiper.astro';
+import ContactFormSection from '../../components/landing/ContactFormSection.astro';
+import ClientsSwiper from '../../components/landing/ClientsSwiper.astro';
+import MapEmbed from '../../components/landing/MapEmbed.astro';
+import FooterFive from '../../components/landing/FooterFive.astro';
+import { contact } from '../../data/contact';
+
+const page = contact;
+---
+
+<Layout title={page.meta.title} description={page.meta.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={page.header}
+            phoneDisplay={page.headerPhoneDisplay}
+            phoneTelHref={page.headerPhoneTelHref}
+        />
+        <TitleBar
+            heading={page.titleBarHeading}
+            homeLabel={page.breadcrumbHomeLabel}
+            homeUrl={page.breadcrumbHomeUrl}
+            currentLabel={page.breadcrumbCurrentLabel}
+        />
+        <div class="page-content">
+            <ContactIhboxSwiper cards={page.ihboxCards} />
+            <ContactFormSection
+                subtitle={page.contactSubtitle}
+                title={page.contactTitle}
+                intro={page.contactIntro}
+                formHeading={page.formHeading}
+                services={page.serviceOptions}
+            />
+            <ClientsSwiper logos={page.clientLogos} />
+            <MapEmbed embedUrl={page.mapEmbedUrl} title={page.mapIframeTitle} />
+        </div>
+        <FooterFive data={page.footer} />
+    </div>
+    {page.jsonLd.map((entry) => (
+        <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
+</Layout>

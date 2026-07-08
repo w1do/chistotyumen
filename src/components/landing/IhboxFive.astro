@@ -1,0 +1,34 @@
+---
+import { Image } from 'astro:assets';
+import { resolveImage } from '../../lib/images';
+import type { IhboxItem } from '../../data/home';
+
+interface Props {
+  items: IhboxItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="section-lg ihbox-five">
+    <div class="container">
+        <div class="row g-0">
+            {items.map((item) => (
+                <div class="pbmit-col-20">
+                    <div class="pbmit-ihbox-style-10">
+                        <div class="pbmit-ihbox-headingicon">
+                            <div class="pbmit-ihbox-icon">
+                                <div class="pbmit-ihbox-icon-wrapper pbmit-ihbox-icon-type-image">
+                                    <Image src={resolveImage(item.imagePath)} alt={item.imageAlt} loading="lazy" />
+                                </div>
+                            </div>
+                            <div class="pbmit-ihbox-contents">
+                                <h2 class="pbmit-element-title">{item.title}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

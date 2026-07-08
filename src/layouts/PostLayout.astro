@@ -1,0 +1,273 @@
+---
+import { Image } from 'astro:assets';
+import Layout from './Layout.astro';
+import HeaderServiceDetails from '../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../components/landing/TitleBar.astro';
+import FooterFive from '../components/landing/FooterFive.astro';
+import { resolveImage } from '../lib/images';
+import { header, footer, site } from '../data/home';
+
+interface Stat {
+    value: number;
+    title: string;
+    desc: string;
+}
+
+interface Faq {
+    q: string;
+    a: string;
+}
+
+interface PostFrontmatter {
+    cluster: string;
+    title: string;
+    description: string;
+    imagePath: string;
+    imageAlt: string;
+    contentTitle?: string;
+    intro?: string;
+    features?: string[];
+    image2?: string;
+    image2Alt?: string;
+    image3?: string;
+    image3Alt?: string;
+    paragraph2?: string;
+    stats?: Stat[];
+    faqTitle?: string;
+    faqIntro?: string;
+    faqs?: Faq[];
+}
+
+interface Props {
+    frontmatter: PostFrontmatter;
+}
+
+const { frontmatter } = Astro.props;
+const data = frontmatter;
+
+// Ссылки на услуги (кластеры) для сайдбара и хлебных крошек.
+const serviceLinks = (header.navItems.find((i) => i.url === '/uslugi')?.children ?? []);
+const clusterLink = serviceLinks.find((c) => c.url === `/uslugi/${data.cluster}`);
+const clusterLabel = clusterLink?.label ?? 'Услуги';
+
+const phoneTelHref = `tel:${site.phoneTel}`;
+
+// ---- Значения по умолчанию (когда поля не заданы во frontmatter поста) ----
+// Полностью повторяют структуру блоков макета service-details.html,
+// но с тематическим текстом химчистки. Текст можно переопределить в md-посте.
+const contentTitle = data.contentTitle ?? data.title;
+
+const features = data.features ?? [
+    'Опытные мастера с профильным оборудованием',
+    'Работаем с любыми типами тканей и обивки',
+    'Безопасная химия без резкого запаха',
+    'Выезд на дом в удобное для вас время',
+    'Удаляем пятна, запахи и следы загрязнений',
+    'Гарантия результата и честная цена',
+];
+const featuresLeft = features.filter((_, i) => i % 2 === 0);
+const featuresRight = features.filter((_, i) => i % 2 === 1);
+
+const image2 = data.image2 ?? 'images/homepage-2/blog/blog-02.jpg';
+const image2Alt = data.image2Alt ?? data.imageAlt;
+const image3 = data.image3 ?? 'images/homepage-2/blog/blog-03.jpg';
+const image3Alt = data.image3Alt ?? data.imageAlt;
+
+const paragraph2 = data.paragraph2 ??
+    'Мы используем профессиональную химию и экстракторную технологию: раствор проникает в волокна, растворяет загрязнения, а мощный вакуум вытягивает влагу вместе с грязью. Так обивка очищается глубоко и быстро сохнет, без разводов и заломов.';
+
+const stats = data.stats ?? [
+    { value: 98, title: 'Довольных клиентов', desc: 'Возвращаются к нам и рекомендуют друзьям' },
+    { value: 100, title: 'Безопасная химия', desc: 'Средства без вреда для детей и животных' },
+    { value: 90, title: 'Удаление пятен', desc: 'Справляемся даже со сложными загрязнениями' },
+];
+
+const faqTitle = data.faqTitle ?? 'Частые вопросы';
+const faqIntro = data.faqIntro ??
+    'Собрали ответы на вопросы, которые чаще всего задают перед заказом химчистки. Если не нашли свой — просто напишите нам, подскажем по вашей ситуации.';
+const faqs = data.faqs ?? [
+    { q: 'Сколько сохнет мебель после чистки?', a: 'Обычно от 2 до 6 часов в зависимости от типа обивки и влажности в помещении. Сушку ускоряем осушителем.' },
+    { q: 'Химчистка безопасна для детей и животных?', a: 'Да, мы используем гипоаллергенные сертифицированные средства без резкого запаха и вредных испарений.' },
+    { q: 'Вы удаляете сложные пятна и запахи?', a: 'В большинстве случаев да. Итог зависит от природы и давности загрязнения — оценим по фото заранее.' },
+    { q: 'Как рассчитывается стоимость?', a: 'Цена зависит от типа изделия, площади обивки и степени загрязнения. Пришлите фото — назовём точную сумму.' },
+];
+---
+
+<Layout title={data.title} description={data.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={header}
+            phoneDisplay={site.phone}
+            phoneTelHref={phoneTelHref}
+        />
+        <TitleBar
+            heading={data.title}
+            homeLabel={site.brand}
+            homeUrl="/"
+            currentLabel={data.title}
+            trailItems={[
+                { label: 'Услуги', url: '/uslugi' },
+                { label: clusterLabel, url: `/uslugi/${data.cluster}` },
+            ]}
+        />
+        <div class="page-content">
+
+            <!-- Service Details -->
+            <section class="site-content service-details">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9 service-right-col">
+                            <div class="pbmit-service-feature-image">
+                                <Image src={resolveImage(data.imagePath)} class="img-fluid w-100" alt={data.imageAlt} loading="lazy" />
+                            </div>
+                            <div class="pbmit-entry-content">
+                                <div class="pbmit-service-content">
+                                    <div class="pbmit-heading mb-3 animation-style2">
+                                        <h3 class="pbmit-title">{contentTitle}</h3>
+                                    </div>
+                                    <div class="pbmit-firstletter">
+                                        <slot />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="list-group list-group-borderless">
+                                                {featuresLeft.map((f) => (
+                                                    <li class="list-group-item">
+                                                        <span class="pbmit-icon-list-icon">
+                                                            <i aria-hidden="true" class="pbmit-xinterio-icon pbmit-xinterio-icon-tick-mark"></i>
+                                                        </span>
+                                                        <span class="pbmit-icon-list-text">{f}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="list-group list-group-borderless">
+                                                {featuresRight.map((f) => (
+                                                    <li class="list-group-item">
+                                                        <span class="pbmit-icon-list-icon">
+                                                            <i aria-hidden="true" class="pbmit-xinterio-icon pbmit-xinterio-icon-tick-mark"></i>
+                                                        </span>
+                                                        <span class="pbmit-icon-list-text">{f}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="service-det-img">
+                                        <div class="row">
+                                            <div class="col-md-6 text-center">
+                                                <div class="pbmit-animation-style1">
+                                                    <Image src={resolveImage(image2)} class="img-fluid" alt={image2Alt} loading="lazy" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 text-center">
+                                                <div class="pbmit-animation-style2">
+                                                    <Image src={resolveImage(image3)} class="img-fluid" alt={image3Alt} loading="lazy" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>{paragraph2}</div>
+                                    <div class="fid-style-rea">
+                                        <div class="row">
+                                            {stats.map((s) => (
+                                                <div class="col-md-4">
+                                                    <div class="pbminfotech-ele-fid-style-3">
+                                                        <div class="pbmit-fld-contents">
+                                                            <div class="pbmit-circle-outer" data-digit={s.value} data-fill="#bb9a65" data-emptyfill="" data-before="" data-after="<span>%</span>" data-thickness="1.5" data-size="153">
+                                                                <div class="pbmit-circle">
+                                                                    <div class="pbmit-fid-inner">
+                                                                        <span class="pbmit-fid-before"></span>
+                                                                        <span class="pbmit-number-rotate numinate" data-appear-animation="animateDigits" data-from="0" data-to={s.value} data-interval="5" data-before="" data-before-style="" data-after="" data-after-style="">{s.value}</span>
+                                                                        <span class="pbmit-fid"><span>%</span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pbmit-fid-sub">
+                                                                <h3 class="pbmit-fid-title">{s.title}</h3>
+                                                                <div class="pbmit-heading-desc">{s.desc}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div class="pbmit-heading mb-3 animation-style2">
+                                        <h3 class="pbmit-title">{faqTitle}</h3>
+                                    </div>
+                                    <p>{faqIntro}</p>
+                                    <div class="accordion" id="accordionExample1">
+                                        {faqs.map((faq, i) => (
+                                            <div class={i === 0 ? 'accordion-item active' : 'accordion-item'}>
+                                                <h2 class="accordion-header" id={`heading${i + 1}`}>
+                                                    <button class={i === 0 ? 'accordion-button' : 'accordion-button collapsed'} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${i + 1}`} aria-expanded="false" aria-controls={`collapse${i + 1}`}>
+                                                        <span class="pbmit-accordion-icon pbmit-accordion-icon-right">
+                                                            <span class="pbmit-accordion-icon-closed">
+                                                                <svg class="e-font-icon-svg e-fas-plus" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <span class="pbmit-accordion-icon-opened">
+                                                                <svg class="e-font-icon-svg e-fas-minus" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </span>
+                                                        <span class="pbmit-accordion-title">
+                                                            {faq.q}
+                                                        </span>
+                                                    </button>
+                                                </h2>
+                                                <div id={`collapse${i + 1}`} class={i === 0 ? 'accordion-collapse collapse show' : 'accordion-collapse collapse'} aria-labelledby={`heading${i + 1}`} data-bs-parent="#accordionExample1">
+                                                    <div class="accordion-body">
+                                                        <p>{faq.a}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 service-left-col sidebar">
+                            <aside class="service-sidebar">
+                                <aside class="widget post-list">
+                                    <h2 class="widget-title">Наши услуги</h2>
+                                    <div class="all-post-list">
+                                        <ul>
+                                            {serviceLinks.map((link) => (
+                                                <li><a href={link.url}> {link.label} </a></li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </aside>
+                                <aside class="widget pbmit-service-ad">
+                                    <div class="textwidget">
+                                        <div class="pbmit-service-ads">
+                                            <h5 class="pbmit-ads-subheding">Чисто Тюмень</h5>
+                                            <h4 class="pbmit-ads-subtitle">Нужна химчистка?</h4>
+                                            <h3 class="pbmit-ads-title">Вызовите мастера!</h3>
+                                            <div class="pbmit-ads-desc">
+                                                <i class="pbmit-base-icon-phone-call-1" aria-hidden="true"></i>{site.phone}
+                                            </div>
+                                            <a class="pbmit-btn pbmit-btn-hover-white" href={site.telegramUrl}>
+                                                <span class="pbmit-button-content-wrapper">
+                                                    <span class="pbmit-button-text">Написать в MAX</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Service Details End -->
+
+        </div>
+        <FooterFive data={footer} />
+    </div>
+</Layout>

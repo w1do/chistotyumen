@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import { resolveImage } from '../../lib/images';
+import type { ClientLogo } from '../../data/home';
+
+interface Props {
+  logos: ClientLogo[];
+}
+
+const { logos } = Astro.props;
+---
+
+<section class="section-md overflow-hidden">
+    <div class="container">
+        <div class="row g-4">
+            {logos.map((logo) => (
+                <article class="pbmit-client-style-1 pbmit-col-20">
+                    <div class="pbmit-border-wrapper">
+                        <div class="pbmit-client-wrapper pbmit-client-with-hover-img">
+                            <h4 class="pbmit-hide">{logo.visuallyHiddenTitle}</h4>
+                            <div class="pbmit-client-hover-img">
+                                <Image src={resolveImage(logo.hoverImagePath)} class="w-100" alt={logo.alt} loading="lazy" />
+                            </div>
+                            <div class="pbmit-featured-img-wrapper">
+                                <div class="pbmit-featured-wrapper">
+                                    <Image src={resolveImage(logo.greyImagePath)} class="w-100" alt="" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import { asset } from '../../lib/asset';
+import { resolveImage } from '../../lib/images';
+import type { StaticBoxItem } from '../../data/home';
+
+interface StaticBoxesData {
+  subtitle: string;
+  title: string;
+  boxes: StaticBoxItem[];
+}
+
+interface Props {
+  data: StaticBoxesData;
+}
+
+const { data } = Astro.props;
+---
+
+<section class="section-xl pbmit-element-static-box-style-1">
+    <div class="container">
+        <div class="pbmit-heading-subheading text-center animation-style2">
+            <h4 class="pbmit-subtitle">{data.subtitle}</h4>
+            <h2 class="pbmit-title">{data.title}</h2>
+        </div>
+        <div class="pbmit-element-posts-wrapper row g-0">
+            {data.boxes.map((box) => (
+                <article class="pbmit-static-box-style-1">
+                    <div class="pbmit-staticbox-wrapper">
+                        <div class="pbmit-bg-imgbox" style={`background-image: url(${asset(box.backgroundImagePath)})`}>
+                            <div class="pbmit-img">
+                                <Image src={resolveImage(box.backgroundImagePath)} alt={box.foregroundImageAlt} loading="lazy" />
+                            </div>
+                            <div class="pbmit-box-number">{box.number}</div>
+                            <h4 class="pbmit-static-box-title">{box.title}</h4>
+                        </div>
+                        <div class="pbmit-content-box">
+                            <div class="pbmit-box-number">{box.number}</div>
+                            <div class="pbmit-content-inner">
+                                <h4 class="pbmit-static-box-title">{box.title}</h4>
+                                <div class="pbmit-static-box-desc">{box.description}</div>
+                            </div>
+                            <div class="pbmit-static-btn">
+                                <a class="pbmit-button-inner" href={box.buttonUrl}>
+                                    <span class="pbmit-button-wrapper">
+                                        <span class="pbmit-button-text">{box.buttonLabel}</span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <a class="pbmit-link" href={box.buttonUrl}></a>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </div>
+</section>

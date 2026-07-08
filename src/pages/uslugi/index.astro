@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HeaderServiceDetails from '../../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../../components/landing/TitleBar.astro';
+import ServiceFive from '../../components/landing/ServiceFive.astro';
+import MarqueeSection from '../../components/landing/MarqueeSection.astro';
+import AboutFive from '../../components/landing/AboutFive.astro';
+import IhboxFive from '../../components/landing/IhboxFive.astro';
+import PortfolioFive from '../../components/landing/PortfolioFive.astro';
+import StaticBoxFive from '../../components/landing/StaticBoxFive.astro';
+import AboutOfferFive from '../../components/landing/AboutOfferFive.astro';
+import PricingFive from '../../components/landing/PricingFive.astro';
+import FaqSection from '../../components/landing/FaqSection.astro';
+import TestimonialFive from '../../components/landing/TestimonialFive.astro';
+import ClientsFive from '../../components/landing/ClientsFive.astro';
+import BlogFive from '../../components/landing/BlogFive.astro';
+import FooterFive from '../../components/landing/FooterFive.astro';
+import { getCollection } from 'astro:content';
+import {
+  header,
+  site,
+  services,
+  marquee,
+  about,
+  ihboxItems,
+  portfolioSlides,
+  staticBoxes,
+  aboutOffer,
+  pricing,
+  faq,
+  testimonials,
+  clientLogos,
+  blog,
+  footer,
+} from '../../data/home';
+
+// Подготовка мета-тегов
+const meta = {
+    title: 'Услуги химчистки в Тюмени — профессиональная чистка мебели и ковров | Чисто Тюмень',
+    description: 'Полный спектр услуг химчистки в Тюмени: диваны, матрасы, ковры, стулья и мягкая мебель. Работаем на дому и в офисе, удаляем пятна и запахи. Выезд мастера в день обращения.',
+};
+
+const phoneTelHref = `tel:${site.phoneTel}`;
+
+// Привязываем карточки услуг к первым постам соответствующих кластеров
+const allUslugi = await getCollection('uslugi');
+const firstPostUrl = (cluster: string): string | undefined => {
+  const uslugi = allUslugi
+    .filter((p) => p.data.cluster === cluster)
+    .sort((a, b) => a.data.order - b.data.order);
+  const first = uslugi[0];
+  return first ? `/uslugi/${first.data.cluster}/${first.id.split('/').pop()}` : undefined;
+};
+
+const cardClusters = [
+  'khimchistka-divanov',
+  'khimchistka-myagkoy-mebeli',
+  'khimchistka-stulev',
+  'khimchistka-kovrov',
+];
+
+const servicesData = {
+  ...services,
+  title: 'Наши услуги по химчистке в Тюмени',
+  cards: services.cards.map((card, i) => ({
+    ...card,
+    detailUrl: firstPostUrl(cardClusters[i]) ?? card.detailUrl,
+  })),
+};
+
+// Контент от MCP
+const mcpContent = {
+    subtitle: 'Почему мы',
+    title: 'Профессиональная химчистка в Тюмени',
+    description: 'ЧистоТюмень — это не просто уборка, это возвращение уюта и свежести в ваш дом. Мы используем профессиональное оборудование и безопасные средства для достижения идеального результата.',
+};
+
+// Подтягиваем реальные посты для блока "Новости" (BlogFive)
+const allPosts = (await getCollection('posts'))
+    .sort((a, b) => {
+        const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+        const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+        return dateB - dateA;
+    })
+    .slice(0, 3);
+
+const dynamicBlog = {
+    ...blog,
+    posts: allPosts.map(p => ({
+        title: p.data.title,
+        excerpt: p.data.excerpt,
+        url: `/posts/${p.id.split('/').pop()}`,
+        imagePath: p.data.imagePath,
+        imageAlt: p.data.imageAlt,
+        dateLabel: p.data.date || 'Статья',
+        authorLine: p.data.author,
+    }))
+};
+
+---
+
+<Layout title={meta.title} description={meta.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={header}
+            phoneDisplay={site.phone}
+            phoneTelHref={phoneTelHref}
+        />
+        <TitleBar
+            heading="Наши услуги"
+            homeLabel={site.brand}
+            homeUrl="/"
+            currentLabel="Услуги"
+        />
+        <div class="page-content">
+            <ServiceFive data={servicesData} />
+            
+            <!-- Секция с контентом от MCP -->
+            <section class="pbmit-section-content-mcp pt-10 pb-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="pbmit-heading-subheading text-center mb-5">
+                                <h4 class="pbmit-subtitle">{mcpContent.subtitle}</h4>
+                                <h2 class="pbmit-title">{mcpContent.title}</h2>
+                            </div>
+                            <div class="mcp-body-text px-lg-5">
+                                <p class="text-center mb-4">{mcpContent.description}</p>
+                                <div class="row mt-5">
+                                    <div class="col-md-6 mb-4">
+                                        <h3 class="h4 mb-3">Химчистка диванов и матрасов</h3>
+                                        <p>Чистка дивана на дому позволит вам не только сэкономить время, но и избежать лишних хлопот, связанных с транспортировкой мебели. А регулярная чистка матрасов позволит не только продлить срок их службы, но и улучшить качество вашего сна.</p>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <h3 class="h4 mb-3">Доступная стоимость</h3>
+                                        <p>В ЧистоТюмень мы предлагаем доступные расценки. Минимальная сумма заказа составляет 3000 ₽, что включает бесплатный выезд по Тюмени. Мы гарантируем индивидуальный подход к каждому клиенту.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <MarqueeSection items={marquee} />
+            <AboutFive data={about} />
+            <IhboxFive items={ihboxItems} />
+            <PortfolioFive slides={portfolioSlides} />
+            <StaticBoxFive data={staticBoxes} />
+            <AboutOfferFive data={aboutOffer} />
+            <PricingFive data={pricing} />
+            <FaqSection data={faq} />
+            <TestimonialFive data={testimonials} />
+            <ClientsFive logos={clientLogos} />
+            <BlogFive data={dynamicBlog} />
+        </div>
+        <FooterFive data={footer} />
+    </div>
+</Layout>
+
+<style>
+    .mcp-body-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #555;
+    }
+    .mcp-body-text h3 {
+        color: #222;
+        font-weight: 600;
+    }
+</style>

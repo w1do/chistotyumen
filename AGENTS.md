@@ -1,22 +1,67 @@
-## Development
+# План проекта: Чисто Тюмень
 
-When starting the dev server, use background mode:
+Этот файл содержит описание основной идеи проекта, спецификацию дизайна и стратегию запуска.
 
-```
-astro dev --background
-```
+## 💡 Идея проекта
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+**ЧистоТюмень** — это сайт по клининговым услугам
+👉 **[idea.md](./idea.md)**
 
-## Documentation
+## Компоненты страницы
+Следуй всем правилам из файла по созданию структуры страницы👉 **[Инструкции по сборке лендинга](./LANDING.md)**
 
-Full documentation: https://docs.astro.build
+### Основные задачи по архитектуре:
 
-Consult these guides before working on related tasks:
+- Создание лендинга сайта
+- Наполнить статическим контеном через .md
+- Подготовить сайт для лучшей индексации сайта в поисковых системах
+- Сделать максимально быстрым простым в обслуживании
+- Удобные места для переиспользования контента mocks/ и компонентный подход где каждый компонент дробиться на множество других
+- Наполнить сайт статическим контентом по сео правилам
 
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+### Технологический стек:
+
+- **Framework**: Astro (SSG/SSR)
+- **Styling**: Tailwind CSS
+- **UI**: Shadcn UI + Lucide Icons
+- **Content**: Markdown (Content Collections)
+- **SEO**: `frontend/astro/seo/SKILL.md` — Правила написания оптимизированного контента
+- **Архитекстура**: `frontend/astro/architecture/SKILL.md` — архитектура проекта
+
+---
+
+### MCP написания контента
+- Каждый раз когда нужно написать контент, (`пост`, `статью`, `страницу`, `посадочный материал`, `сео наполнение`) по тематике сайта обращайся к MCP `rag-content-botsync-chimchistka` с запросом и id шаблона для написания контента по обученому RAG 
+- Пример: напиши статью на тему химчистка матрасов летом, используя шаблон под id 10
+
+## Оставление заявки (N8N)
+- Используй endpoint оставление заявки на n8n по адресу `https://n8n.w1do.ru/webhook/requests` -> POST 
+- body -> {"email": "test@mail.ru", "subject": "Тема","phone": "89088712026","message": "Тест сообщения","project": "chistotyumen"}
+
+## Сборка страниц под запрос (посадочные)
+- использовать навык `frontent/astro/landing-copy/SKILL.md`
+
+### Компоненты и User Story
+Любая реализация большого функционала, или большой вёрстки, должна быть гибко реализована через компоненты, если это header дробить все части на мелкие состовляющие ложить в папку components/shared/header/*.astro, и так же с другими, не допускать портянку инструкции по компонентам  `frontend/astro/components`
+
+### Архитектура
+- Смотреть инструкции `frontent/astro/architecture/SKILL.md`
+
+## 🔍 SEO и Контент
+
+Для создания качественного и оптимизированного контента используй следующие ресурсы:
+
+- **Гайд по Markdown**: `frontend/astro/seo/SKILL.md`
+- **Ключевые слова**: [seo кластер](./seo) — основной список запросов разбит по кластерам
+
+---
+
+## Документация и логирование
+
+Полная документация проекта по каждому этапу
+👉 **[SUMMARY.md](./SUMMARY.md)**
+
+---
+
+### Первоочередные шаги (MVP):
+Документация поддерживается в актуальном состоянии согласно правилу `frontend/astro/documentation/SKILL.md`

@@ -1,5 +1,6 @@
 # build output
 dist/
+ref/
 
 # generated types
 .astro/
@@ -22,3 +23,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+AGENTS.md
+CLAUDE.md
+PLAN.md
+SUMMARY.md
+.agents
+/.junie
+/seo
+idea.md
+LANDING.md
+/source
+/ref

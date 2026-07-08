@@ -1,0 +1,90 @@
+﻿---
+import Layout from '../../../layouts/Layout.astro';
+import HeaderServiceDetails from '../../../components/landing/HeaderServiceDetails.astro';
+import TitleBar from '../../../components/landing/TitleBar.astro';
+import { site } from '../../../data/home';
+
+import ServiceFive from '../../../components/landing/ServiceFive.astro';
+import MarqueeSection from '../../../components/landing/MarqueeSection.astro';
+import AboutFive from '../../../components/landing/AboutFive.astro';
+import IhboxFive from '../../../components/landing/IhboxFive.astro';
+import PortfolioFive from '../../../components/landing/PortfolioFive.astro';
+import StaticBoxFive from '../../../components/landing/StaticBoxFive.astro';
+import AboutOfferFive from '../../../components/landing/AboutOfferFive.astro';
+import PricingFive from '../../../components/landing/PricingFive.astro';
+import FaqSection from '../../../components/landing/FaqSection.astro';
+import TestimonialFive from '../../../components/landing/TestimonialFive.astro';
+import ClientsFive from '../../../components/landing/ClientsFive.astro';
+import BlogFive from '../../../components/landing/BlogFive.astro';
+import ClusterPosts from '../../../components/landing/ClusterPosts.astro';
+import FooterFive from '../../../components/landing/FooterFive.astro';
+import { clusters } from '../../../data/clusters';
+import { getCollection } from 'astro:content';
+
+const slug = 'khimchistka-divanov';
+const data = clusters[slug];
+const uslugiEntries = (await getCollection('uslugi', ({ data: post }) => post.cluster === slug))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map((entry) => ({
+        title: entry.data.title,
+        excerpt: entry.data.excerpt,
+        url: `/uslugi/${entry.data.cluster}/${entry.id.split('/').pop()}`,
+        imagePath: entry.data.imagePath,
+        imageAlt: entry.data.imageAlt,
+        dateLabel: entry.data.dateLabel,
+        author: entry.data.author,
+    }));
+
+const clusterPosts = (await getCollection('posts', ({ data: post }) => !post.cluster || post.cluster === slug))
+    .map((entry) => ({
+        title: entry.data.title,
+        excerpt: entry.data.excerpt,
+        url: `/posts/${entry.id.split('/').pop()}`,
+        imagePath: entry.data.imagePath,
+        imageAlt: entry.data.imageAlt,
+        dateLabel: entry.data.date || 'Статья',
+        author: entry.data.author,
+    }));
+
+const services = {
+    ...data.services,
+    cards: data.services.cards.map((card, i) => ({
+        ...card,
+        detailUrl: uslugiEntries[i]?.url ?? card.detailUrl,
+    })),
+};
+---
+
+<Layout title={data.meta.title} description={data.meta.description}>
+    <div class="page-wrapper">
+        <HeaderServiceDetails
+            header={data.header}
+            phoneDisplay={site.phone}
+            phoneTelHref={`tel:${site.phoneTel}`}
+        />
+        <TitleBar
+            heading={data.services.title}
+            homeLabel={site.brand}
+            homeUrl="/"
+            currentLabel={data.services.subtitle}
+            trailItems={[
+                { label: 'Услуги', url: '/uslugi' },
+            ]}
+        />
+        <div class="page-content">
+            <ServiceFive data={services} />
+            <MarqueeSection items={data.marquee} />
+            <AboutFive data={data.about} />
+            <IhboxFive items={data.ihboxItems} />
+            <PortfolioFive slides={data.portfolioSlides} />
+            <StaticBoxFive data={data.staticBoxes} />
+            <AboutOfferFive data={data.aboutOffer} />
+            <PricingFive data={data.pricing} />
+            <FaqSection data={data.faq} />
+            <TestimonialFive data={data.testimonials} />
+            <ClientsFive logos={data.clientLogos} />
+            <ClusterPosts subtitle="Полезное" title="Статьи по теме химчистки диванов" posts={clusterPosts} />
+        </div>
+        <FooterFive data={data.footer} />
+    </div>
+</Layout>

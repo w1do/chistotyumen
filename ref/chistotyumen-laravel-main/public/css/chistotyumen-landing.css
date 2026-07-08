@@ -1,0 +1,58 @@
+/**
+ * Пора Чистить — точечные правки лендинга (после theme CSS).
+ */
+
+/* Блок «от 5 000» в секции стоимости — тёмный фон, золото по центру */
+.cty-pricing-headline-price {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.12em;
+    margin-top: 28px;
+    margin-bottom: 28px;
+    padding: 22px 18px;
+    background-color: #3d2b22;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.cty-pricing-headline-price__prefix {
+    align-self: flex-start;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1;
+    padding-top: 0.42em;
+}
+
+.cty-pricing-headline-price__amount {
+    font-size: clamp(2.35rem, 4.5vw, 3.1rem);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #c9a46b;
+}
+
+.cty-pricing-headline-price__suffix {
+    align-self: flex-end;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1;
+    padding-bottom: 0.38em;
+}
+
+/* Тарифы: размер цифры цены */
+.pbminfotech-ele-ptable-style-2 .pbminfotech-ptable-price {
+    font-size: 40px;
+    line-height: 40px;
+}
+
+/* Услуги: ограничиваем высоту изображений карточек */
+.service-section-five .pbmit-ele-service .pbmit-featured-wrapper img {
+    max-height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
