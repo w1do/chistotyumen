@@ -53,14 +53,14 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sli
 		<meta property="og:type" content="article" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		{imagePath && <meta property="og:image" content={new URL(imagePath, Astro.site)} />}
+		{imagePath && <meta property="og:image" content={new URL(imagePath, Astro.site).toString()} />}
 		
 		<script type="application/ld+json" is:inline set:html={JSON.stringify({
 			"@context": "https://schema.org",
 			"@type": "BlogPosting",
 			"headline": title,
 			"description": description,
-			"image": imagePath ? new URL(imagePath, Astro.site) : undefined,
+			"image": imagePath ? new URL(imagePath, Astro.site).toString() : undefined,
 			"datePublished": date,
 			"author": {
 				"@type": "Organization",
@@ -77,7 +77,7 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sli
 			},
 			"mainEntityOfPage": {
 				"@type": "WebPage",
-				"@id": new URL(Astro.url.pathname, Astro.site)
+				"@id": new URL(Astro.url.pathname, Astro.site).toString()
 			}
 		})} />
 	</Fragment>

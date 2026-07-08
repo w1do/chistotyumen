@@ -38,14 +38,14 @@ const recentPosts = (await getCollection('posts'))
         <meta property="og:type" content="article" />
         <meta property="og:title" content={data.title} />
         <meta property="og:description" content={data.description} />
-        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site)} />}
+        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site).toString()} />}
         
         <script type="application/ld+json" is:inline set:html={JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             "headline": data.title,
             "description": data.description,
-            "image": data.imagePath ? new URL(data.imagePath, Astro.site) : undefined,
+            "image": data.imagePath ? new URL(data.imagePath, Astro.site).toString() : undefined,
             "datePublished": data.date,
             "author": {
                 "@type": "Organization",
@@ -62,7 +62,7 @@ const recentPosts = (await getCollection('posts'))
             },
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": new URL(Astro.url.pathname, Astro.site)
+                "@id": new URL(Astro.url.pathname, Astro.site).toString()
             }
         })} />
     </Fragment>

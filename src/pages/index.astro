@@ -80,6 +80,8 @@ const dynamicBlog = {
         authorLine: p.data.author,
     }))
 };
+
+const siteUrl = Astro.site;
 ---
 
 <Layout>
@@ -92,7 +94,7 @@ const dynamicBlog = {
                 "@type": "ListItem",
                 "position": index + 1,
                 "name": card.title,
-                "url": new URL(card.detailUrl, Astro.site)
+                "url": new URL(card.detailUrl, siteUrl).toString()
             }))
         })} />
     </Fragment>

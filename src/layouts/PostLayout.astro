@@ -98,7 +98,7 @@ const faqs = data.faqs ?? [
         <meta property="og:type" content="article" />
         <meta property="og:title" content={data.title} />
         <meta property="og:description" content={data.description} />
-        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site)} />}
+        {data.imagePath && <meta property="og:image" content={new URL(data.imagePath, Astro.site).toString()} />}
         
         <script type="application/ld+json" is:inline set:html={JSON.stringify({
             "@context": "https://schema.org",
